@@ -95,6 +95,7 @@
 
     // Catalog Modal
     catalogModal: document.getElementById('catalogModal'),
+    catalogMobileCloseBtn: document.getElementById('catalogMobileCloseBtn'),
     catalogCategoriesSidebar: document.getElementById('catalogCategoriesSidebar'),
     catalogSubcategoriesArea: document.getElementById('catalogSubcategoriesArea'),
 
@@ -854,15 +855,19 @@
 
     renderCatalogSubcategories(state.categories[0].id);
 
-    // Kategoriya ustiga sichqoncha kelganda yoki bosilganda
-    dom.catalogCategoriesSidebar.addEventListener('mouseover', (e) => {
+    // Kategoriya ustiga sichqoncha kelganda yoki bosilganda (mobil uchun click ham)
+    const handleCatalogCategorySelect = (e) => {
       const item = e.target.closest('.catalog-cat-item');
       if (item) {
         dom.catalogCategoriesSidebar.querySelectorAll('.catalog-cat-item').forEach(i => i.classList.remove('active'));
         item.classList.add('active');
+        item.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         renderCatalogSubcategories(item.dataset.catId);
       }
-    });
+    };
+
+    dom.catalogCategoriesSidebar.addEventListener('mouseover', handleCatalogCategorySelect);
+    dom.catalogCategoriesSidebar.addEventListener('click', handleCatalogCategorySelect);
 
     // Subkategoriyaga bosilganda
     dom.catalogSubcategoriesArea.addEventListener('click', (e) => {
@@ -884,6 +889,9 @@
     // Katalog tugmasi bosilishi
     dom.catalogToggleBtn.addEventListener('click', toggleCatalogModal);
     dom.mobNavCatalog.addEventListener('click', toggleCatalogModal);
+
+    // Mobil katalog oynasini yopish
+    dom.catalogMobileCloseBtn.addEventListener('click', closeCatalogModal);
 
     // Modal orqa foni bosilganda yopish
     dom.catalogModal.addEventListener('click', (e) => {
